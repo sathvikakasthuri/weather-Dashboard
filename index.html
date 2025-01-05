@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Weather Dashboard</h1>
+    <input type="text" id="cityInput" placeholder="Enter city name" />
+<button id="getWeatherBtn">Get Weather</button>
+<div id="weatherResult">
+  <!-- Weather details will appear here -->
+  <h2>Seattle</h2>
+  <p>Temperature: 10°C</p>
+  <p>Weather: clear sky</p>
+  <p>Humidity: 80%</p>
+</div>
+
+<script>
+  const apiKey = 'your_actual_api_key';
+  const apiBaseUrl = 'https://api.openweathermap.org/data/2.5/weather';
+
+  const getWeatherBtn = document.getElementById('getWeatherBtn');
+  getWeatherBtn.addEventListener('click', () => {
+    const city = document.getElementById('cityInput').value;
+    const url = `${apiBaseUrl}?q=${city}&appid=${apiKey}`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        const weatherResult = document.getElementById('weatherResult');
+        weatherResult.innerHTML = `
+          <h2>${data.name}</h2>
+          <p>Temperature: ${Math.round(data.main.temp - 273.15)}°C</p>
+          <p>Weather: ${data.weather[0].description}</p>
+          <p>Humidity: ${data.main.humidity}%</p>
+        `;
+      })
+      .catch(error => console.error('Error fetching weather data:', error));
+  });
+</script>
+</body>
+</html>
